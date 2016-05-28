@@ -491,7 +491,7 @@ public class PolyObjectController : MonoBehaviour {
     public static int the_thing_width = 128; //256时 内存1500M 且慢 但是效果好
     bool ImgPixel(Texture2D t, float x, float y)
     {
-        return t.GetPixel((int)(x * t.width), (int)(y * t.height)).r > 0.5f;
+        return t.GetPixel((int)(x * t.width), (int)(y * t.height)).r < 0.5f;
     }
     //secret cube， 从3图片构造形体的按钮过程,这个形体叫做TheThing
     public void AddTheThing()
@@ -540,16 +540,29 @@ public class PolyObjectController : MonoBehaviour {
         {
             for (int j = 1; j < the_thing_width; j++)
             {
-                if (ImgPixel(img_x, i * 1.0f / the_thing_width, j * 1.0f / the_thing_width) == false)
+                if (ImgPixel(img_y, i * 1.0f / the_thing_width, j * 1.0f / the_thing_width) == false)
                 {
                     for (int k = 1; k < the_thing_width; k++)
                     {
-                        SetEditSpacePoint(i, j, k, 0);
+                        SetEditSpacePoint(i, k, j, 0);
                     }
                 }
             }
         }
 
+        for (int i = 1; i < the_thing_width; i++)
+        {
+            for (int j = 1; j < the_thing_width; j++)
+            {
+                if (ImgPixel(img_z, i * 1.0f / the_thing_width, j * 1.0f / the_thing_width) == false)
+                {
+                    for (int k = 1; k < the_thing_width; k++)
+                    {
+                        SetEditSpacePoint(k, i, j, 0);
+                    }
+                }
+            }
+        }
         //var meshColider = GetComponent<MeshCollider>();
         //meshColider.sharedMesh = mesh;
         RefreshMesh();
