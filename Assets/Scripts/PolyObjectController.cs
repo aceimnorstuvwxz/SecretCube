@@ -488,6 +488,75 @@ public class PolyObjectController : MonoBehaviour {
 		RefreshMesh ();
 	}
 
+    public static int the_thing_width = 128; //256时 内存1500M 且慢 但是效果好
+    bool ImgPixel(Texture2D t, float x, float y)
+    {
+        return t.GetPixel((int)(x * t.width), (int)(y * t.height)).r > 0.5f;
+    }
+    //secret cube， 从3图片构造形体的按钮过程,这个形体叫做TheThing
+    public void AddTheThing()
+    {
+        Debug.Log("add the thing");
+        int mat = _materialsController.GetBrushMaterial();
+
+
+        //填满，四周留空
+        for (int i = 1; i < the_thing_width; i++)
+        {
+            for (int j = 1; j < the_thing_width; j++)
+            {
+                for (int k = 1; k < the_thing_width; k++)
+                {
+                    SetEditSpacePoint(i,j,k, mat);
+                }
+            }
+        }
+        
+        Texture2D img_x = Resources.Load("t0") as Texture2D;
+        Texture2D img_y = Resources.Load("t1") as Texture2D;
+        Texture2D img_z = Resources.Load("t2") as Texture2D;
+
+
+        Debug.LogWarning("w,h=" + img_x.width + "," + img_x.height);
+        Debug.LogWarning("w,h=" + img_y.width + "," + img_y.height);
+        Debug.LogWarning("w,h=" + img_z.width + "," + img_z.height);
+
+        //注意图片导入成texture时会自动缩放到2^N
+        for (int i = 1; i < the_thing_width; i++)
+        {
+            for (int j = 1; j < the_thing_width; j++)
+            {
+                if (ImgPixel(img_x, i * 1.0f / the_thing_width, j * 1.0f / the_thing_width) == false)
+                {
+                    for (int k = 1; k < the_thing_width; k++)
+                    {
+                        SetEditSpacePoint(i, j, k, 0);
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i < the_thing_width; i++)
+        {
+            for (int j = 1; j < the_thing_width; j++)
+            {
+                if (ImgPixel(img_x, i * 1.0f / the_thing_width, j * 1.0f / the_thing_width) == false)
+                {
+                    for (int k = 1; k < the_thing_width; k++)
+                    {
+                        SetEditSpacePoint(i, j, k, 0);
+                    }
+                }
+            }
+        }
+
+        //var meshColider = GetComponent<MeshCollider>();
+        //meshColider.sharedMesh = mesh;
+        RefreshMesh();
+
+
+    }
+
 
 	
 	

@@ -77,6 +77,11 @@ public class EditorState : MonoBehaviour {
 		_polyWorldController.ClearA();
 	}
 
+    public void OnClickBtnTheThing()
+    {
+        _polyWorldController.AddTheThing();
+    }
+
 	public void OnBackgroundChange(float value)
 	{
 		Camera.main.backgroundColor = new Color (value, value, value, 1);
